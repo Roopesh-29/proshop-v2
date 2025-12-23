@@ -2,8 +2,8 @@ import { fetchBaseQuery, createApi } from '@reduxjs/toolkit/query/react'
 import { logout } from './authSlice'
 
 const baseQuery = fetchBaseQuery({
-  baseUrl:
-    process.env.REACT_APP_API_URL || 'http://localhost:5000',
+  baseUrl: 'https://proshop-v2-1be7.onrender.com',
+  credentials: 'include',
 })
 
 async function baseQueryWithAuth(args, api, extra) {
