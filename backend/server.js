@@ -1,3 +1,4 @@
+import cors from 'cors'
 import path from 'path'
 import express from 'express'
 import dotenv from 'dotenv'
@@ -17,6 +18,15 @@ connectDB()
 
 const app = express()
 
+// ✅ CORS CONFIG (VERY IMPORTANT)
+app.use(
+  cors({
+    origin: 'https://proshop-v2.vercel.app', // 🔁 replace with your exact Vercel URL
+    credentials: true,
+  })
+)
+
+// Body parsers
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
@@ -27,11 +37,12 @@ app.use('/api/users', userRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/upload', uploadRoutes)
 
+// PayPal config
 app.get('/api/config/paypal', (req, res) =>
   res.send({ clientId: process.env.PAYPAL_CLIENT_ID })
 )
 
-// 🔴 BACKEND-ONLY MODE (IMPORTANT)
+// Backend-only mode (Render)
 const __dirname = path.resolve()
 
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
@@ -40,6 +51,7 @@ app.get('/', (req, res) => {
   res.send('API is running...')
 })
 
+// Error handlers
 app.use(notFound)
 app.use(errorHandler)
 
