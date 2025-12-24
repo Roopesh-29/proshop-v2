@@ -1,23 +1,24 @@
-import { fetchBaseQuery, createApi } from '@reduxjs/toolkit/query/react'
-import { logout } from './authSlice'
+import { fetchBaseQuery, createApi } from '@reduxjs/toolkit/query/react';
+import { BASE_URL } from '../constants';
+import { logout } from './authSlice';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://proshop-v2-1be7.onrender.com',
+  baseUrl: BASE_URL,
   credentials: 'include',
-})
+});
 
-async function baseQueryWithAuth(args, api, extra) {
-  const result = await baseQuery(args, api, extra)
+const baseQueryWithAuth = async (args, api, extraOptions) => {
+  const result = await baseQuery(args, api, extraOptions);
 
-  if (result.error && result.error.status === 401) {
-    api.dispatch(logout())
+  if (result?.error?.status === 401) {
+    api.dispatch(logout());
   }
 
-  return result
-}
+  return result;
+};
 
 export const apiSlice = createApi({
   baseQuery: baseQueryWithAuth,
   tagTypes: ['Product', 'Order', 'User'],
   endpoints: () => ({}),
-})
+});

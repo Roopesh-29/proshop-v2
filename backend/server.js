@@ -1,4 +1,3 @@
-import cors from 'cors'
 import path from 'path'
 import express from 'express'
 import dotenv from 'dotenv'
@@ -11,22 +10,11 @@ import uploadRoutes from './routes/uploadRoutes.js'
 import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 
 dotenv.config()
-
-const port = process.env.PORT || 5000
-
 connectDB()
 
 const app = express()
+const port = process.env.PORT || 5000
 
-// ✅ CORS CONFIG (VERY IMPORTANT)
-app.use(
-  cors({
-    origin: 'https://proshop-v2.vercel.app', // 🔁 replace with your exact Vercel URL
-    credentials: true,
-  })
-)
-
-// Body parsers
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
@@ -37,24 +25,24 @@ app.use('/api/users', userRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/upload', uploadRoutes)
 
-// PayPal config
 app.get('/api/config/paypal', (req, res) =>
   res.send({ clientId: process.env.PAYPAL_CLIENT_ID })
 )
 
-// Backend-only mode (Render)
+// ===== SERVE REACT BUILD =====
 const __dirname = path.resolve()
 
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
+app.use(express.static(path.join(__dirname, '/frontend/build')))
 
-app.get('/', (req, res) => {
-  res.send('API is running...')
-})
+app.get('*', (req, res) =>
+  res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
+)
 
 // Error handlers
 app.use(notFound)
 app.use(errorHandler)
 
 app.listen(port, () =>
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${port}`)
+  console.log(`Server running in production mode on port ${port}`)
 )
