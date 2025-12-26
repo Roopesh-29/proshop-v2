@@ -1,6 +1,7 @@
 import path from 'path'
 import express from 'express'
 import dotenv from 'dotenv'
+import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import connectDB from './config/db.js'
 
@@ -14,6 +15,13 @@ dotenv.config()
 connectDB()
 
 const app = express()
+
+// ✅ THIS IS THE FIX (ALLOW VERCEL → RAILWAY)
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}))
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -29,7 +37,7 @@ app.get('/api/config/paypal', (req, res) =>
   res.send({ clientId: process.env.PAYPAL_CLIENT_ID })
 )
 
-// ===== SERVE FRONTEND =====
+// Serve frontend (optional, fine to keep)
 const __dirname = path.resolve()
 app.use(express.static(path.join(__dirname, '/frontend/build')))
 
@@ -37,7 +45,6 @@ app.get('*', (req, res) =>
   res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
 )
 
-// Error handlers
 app.use(notFound)
 app.use(errorHandler)
 
