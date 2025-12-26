@@ -3,10 +3,9 @@ import { BASE_URL } from '../constants';
 import { logout } from './authSlice';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://localhost:5000',
+  baseUrl: BASE_URL,
   credentials: 'include',
 });
-
 
 const baseQueryWithAuth = async (args, api, extraOptions) => {
   const result = await baseQuery(args, api, extraOptions);
