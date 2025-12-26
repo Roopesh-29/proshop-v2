@@ -1,4 +1,7 @@
-export const BASE_URL = '';
+export const BASE_URL =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:5000'
+    : 'https://proshop-v2-1be7.onrender.com';
 
 export const PRODUCTS_URL = '/api/products';
 export const USERS_URL = '/api/users';
