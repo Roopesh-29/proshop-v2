@@ -1,44 +1,25 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Row, Col } from 'react-bootstrap';
+import { useGetProductsQuery } from '../slices/productsApiSlice';
 import Product from '../components/Product';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
 const HomeScreen = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const { data } = await axios.get(
-          'https://proshop-v2-production-9443.up.railway.app/api/products'
-        );
-
-        setProducts(data.products);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
+  const { data, isLoading, error } = useGetProductsQuery({});
 
   return (
     <>
       <h1>Latest Products</h1>
 
-      {loading ? (
+      {isLoading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger">{error}</Message>
+        <Message variant="danger">
+          {error?.data?.message || error.error}
+        </Message>
       ) : (
         <Row>
-          {products.map((product) => (
+          {data.products.map((product) => (
             <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
               <Product product={product} />
             </Col>
