@@ -1,10 +1,11 @@
 import { apiSlice } from './apiSlice';
+import { PRODUCTS_URL, UPLOAD_URL } from '../constants';
 
 export const productsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: ({ keyword, pageNumber }) => ({
-        url: 'http://localhost:5000/api/products',
+        url: PRODUCTS_URL,
         params: { keyword, pageNumber },
       }),
       keepUnusedDataFor: 5,
@@ -13,14 +14,14 @@ export const productsApiSlice = apiSlice.injectEndpoints({
 
     getProductDetails: builder.query({
       query: (productId) => ({
-        url: `http://localhost:5000/api/products/${productId}`,
+        url: `${PRODUCTS_URL}/${productId}`,
       }),
       keepUnusedDataFor: 5,
     }),
 
     createProduct: builder.mutation({
       query: () => ({
-        url: 'http://localhost:5000/api/products',
+        url: PRODUCTS_URL,
         method: 'POST',
       }),
       invalidatesTags: ['Product'],
@@ -28,7 +29,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
 
     updateProduct: builder.mutation({
       query: (data) => ({
-        url: `http://localhost:5000/api/products/${data.productId}`,
+        url: `${PRODUCTS_URL}/${data.productId}`,
         method: 'PUT',
         body: data,
       }),
@@ -37,7 +38,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
 
     uploadProductImage: builder.mutation({
       query: (data) => ({
-        url: 'http://localhost:5000/api/upload',
+        url: UPLOAD_URL,
         method: 'POST',
         body: data,
       }),
@@ -45,7 +46,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
 
     deleteProduct: builder.mutation({
       query: (productId) => ({
-        url: `http://localhost:5000/api/products/${productId}`,
+        url: `${PRODUCTS_URL}/${productId}`,
         method: 'DELETE',
       }),
       providesTags: ['Product'],
@@ -53,7 +54,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
 
     createReview: builder.mutation({
       query: (data) => ({
-        url: `http://localhost:5000/api/products/${data.productId}/reviews`,
+        url: `${PRODUCTS_URL}/${data.productId}/reviews`,
         method: 'POST',
         body: data,
       }),
@@ -61,7 +62,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
     }),
 
     getTopProducts: builder.query({
-      query: () => 'http://localhost:5000/api/products/top',
+      query: () => `${PRODUCTS_URL}/top`,
       keepUnusedDataFor: 5,
     }),
   }),
