@@ -13,7 +13,10 @@ const HomeScreen = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const { data } = await axios.get('/api/products'); // ✅ FIX
+        const { data } = await axios.get(
+          'https://proshop-v2-production-9443.up.railway.app/api/products'
+        );
+
         setProducts(data.products);
         setLoading(false);
       } catch (err) {
@@ -28,6 +31,7 @@ const HomeScreen = () => {
   return (
     <>
       <h1>Latest Products</h1>
+
       {loading ? (
         <Loader />
       ) : error ? (
