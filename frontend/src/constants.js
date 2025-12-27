@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://proshop-v2-1be7.onrender.com';
+export const BASE_URL = ''; // SAME DOMAIN
 
 export const PRODUCTS_URL = '/api/products';
 export const USERS_URL = '/api/users';

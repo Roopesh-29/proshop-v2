@@ -1,7 +1,6 @@
 import path from 'path'
 import express from 'express'
 import dotenv from 'dotenv'
-import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import connectDB from './config/db.js'
 
@@ -15,17 +14,6 @@ dotenv.config()
 connectDB()
 
 const app = express()
-
-// ✅ CORRECT CORS FOR RENDER + VERCEL
-app.use(
-  cors({
-    origin: [
-      'http://localhost:3000',
-      'https://proshop-v2-l5vs.vercel.app',
-    ],
-    credentials: true,
-  })
-)
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -41,7 +29,7 @@ app.get('/api/config/paypal', (req, res) =>
   res.send({ clientId: process.env.PAYPAL_CLIENT_ID })
 )
 
-// Serve frontend (optional)
+// === SERVE FRONTEND FROM SAME DOMAIN ===
 const __dirname = path.resolve()
 app.use(express.static(path.join(__dirname, '/frontend/build')))
 
