@@ -13,9 +13,7 @@ const HomeScreen = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const { data } = await axios.get(
-          'http://localhost:5000/api/products'
-        );
+        const { data } = await axios.get('/api/products'); // ✅ FIX
         setProducts(data.products);
         setLoading(false);
       } catch (err) {
