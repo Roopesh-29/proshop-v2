@@ -16,12 +16,16 @@ connectDB()
 
 const app = express()
 
-// ✅ THIS IS THE FIX (ALLOW VERCEL → RAILWAY)
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}))
+// ✅ CORRECT CORS FOR RENDER + VERCEL
+app.use(
+  cors({
+    origin: [
+      'http://localhost:3000',
+      'https://proshop-v2-l5vs.vercel.app',
+    ],
+    credentials: true,
+  })
+)
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -37,7 +41,7 @@ app.get('/api/config/paypal', (req, res) =>
   res.send({ clientId: process.env.PAYPAL_CLIENT_ID })
 )
 
-// Serve frontend (optional, fine to keep)
+// Serve frontend (optional)
 const __dirname = path.resolve()
 app.use(express.static(path.join(__dirname, '/frontend/build')))
 
